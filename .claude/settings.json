@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"/Users/riopang/Desktop/Claude Code\" && git add -A && (git diff --cached --quiet || (git commit -m \"Auto-backup: $(date '+%Y-%m-%d %H:%M:%S')\" -q && git push origin main -q)) 2>/dev/null || true",
+            "statusMessage": "Backing up to GitHub..."
+          }
+        ]
+      }
+    ]
+  }
+}
