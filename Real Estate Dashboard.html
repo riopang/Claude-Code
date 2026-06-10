@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Real Estate Command Centre — Singapore</title>
+<style>
+  :root{
+    --bg:#f4f6f8; --card:#ffffff; --ink:#16222e; --muted:#5d6b7a; --line:#e3e8ee;
+    --accent:#0e5e66; --accent-soft:#e3f0f1;
+    --ccr:#6d4fa3; --ccr-bg:#f0eaf9;
+    --rcr:#b07908; --rcr-bg:#fdf3dd;
+    --ocr:#2e7d4f; --ocr-bg:#e6f4ec;
+    --up:#1e7d46; --down:#b3392e; --warn:#9a5b00; --warn-bg:#fff3e0;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);padding:28px 20px 60px;line-height:1.45}
+  .wrap{max-width:1180px;margin:0 auto}
+  header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:6px}
+  h1{font-size:26px;letter-spacing:-.3px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:22px}
+  .sub a{color:var(--accent)}
+  h2{font-size:15px;text-transform:uppercase;letter-spacing:1.1px;color:var(--muted);margin:34px 0 14px}
+  .grid{display:grid;gap:14px}
+  .stats{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+  .stat .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+  .stat .value{font-size:26px;font-weight:700;margin:4px 0 2px}
+  .stat .note{font-size:12.5px;color:var(--muted)}
+  .delta-up{color:var(--up);font-weight:600}
+  .delta-down{color:var(--down);font-weight:600}
+  .pipeline{grid-template-columns:repeat(auto-fit,minmax(330px,1fr))}
+  .proj{display:flex;flex-direction:column;gap:10px}
+  .proj-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .proj h3{font-size:17px}
+  .proj h3 a{color:var(--ink);text-decoration:none}
+  .proj h3 a:hover{color:var(--accent)}
+  .badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap}
+  .b-ccr{background:var(--ccr-bg);color:var(--ccr)} .b-rcr{background:var(--rcr-bg);color:var(--rcr)} .b-ocr{background:var(--ocr-bg);color:var(--ocr)}
+  .countdown{font-size:12px;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:3px 9px;border-radius:99px;white-space:nowrap}
+  .countdown.warn{color:var(--warn);background:var(--warn-bg)}
+  .meta{font-size:13px;color:var(--muted)}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:13.5px}
+  .kv dt{color:var(--muted)} .kv dd{font-weight:600}
+  .hook{font-size:13px;background:var(--accent-soft);border-radius:8px;padding:8px 11px;color:#0c4a51}
+  .obs-link{font-size:12.5px;color:var(--accent);text-decoration:none;font-weight:600;margin-top:auto}
+  .obs-link:hover{text-decoration:underline}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);padding:8px 10px;border-bottom:2px solid var(--line)}
+  td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .pill{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:99px}
+  .pill.up{background:#e3f3ea;color:var(--up)} .pill.down{background:#fae8e6;color:var(--down)}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:860px){.two-col{grid-template-columns:1fr}}
+  .calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:14px}
+  .field label{display:block;font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:5px}
+  .field input,.field select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;font-size:15px;background:#fff;color:var(--ink)}
+  .field input:focus,.field select:focus{outline:2px solid var(--accent);border-color:transparent}
+  .results{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+  .res{background:var(--bg);border-radius:10px;padding:12px 14px}
+  .res .label{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .res .value{font-size:20px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums}
+  .fine{font-size:12px;color:var(--muted);margin-top:12px}
+  .todo{list-style:none}
+  .todo li{display:flex;gap:10px;align-items:flex-start;padding:9px 4px;border-bottom:1px solid var(--line);font-size:14px}
+  .todo li:last-child{border-bottom:none}
+  .todo input{margin-top:3px;accent-color:var(--accent);width:16px;height:16px;flex-shrink:0}
+  .todo li.done span{text-decoration:line-through;color:var(--muted)}
+  .links{display:flex;flex-wrap:wrap;gap:10px}
+  .links a{font-size:13px;font-weight:600;color:var(--accent);background:var(--card);border:1px solid var(--line);padding:8px 14px;border-radius:99px;text-decoration:none}
+  .links a:hover{border-color:var(--accent)}
+  .datebar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:4px}
+  .date-chip{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:13px;display:flex;flex-direction:column;gap:2px;min-width:170px}
+  .date-chip b{font-size:13.5px}
+  .date-chip .when{color:var(--accent);font-weight:700;font-size:12.5px}
+  @media print{body{background:#fff;padding:0}.card,.date-chip{border-color:#ccc}.links,#calc{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>🏠 Real Estate Command Centre</h1>
+  <span class="meta" id="today"></span>
+</header>
+<div class="sub">Singapore · built from your <a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=00%20Dashboard">Real Estate Second Brain</a> vault · data as of <b>10 Jun 2026</b> · ask Claude to “refresh my dashboard” to regenerate</div>
+
+<!-- ===== MARKET PULSE STATS ===== -->
+<div class="grid stats">
+  <div class="card stat">
+    <div class="label">URA PPI · 1Q 2026</div>
+    <div class="value delta-up">+0.9% <span style="font-size:13px">QoQ</span></div>
+    <div class="note">6th straight quarter of growth (4Q25: +0.6%)</div>
+  </div>
+  <div class="card stat">
+    <div class="label">OCR Leads Growth</div>
+    <div class="value delta-up">+2.2% <span style="font-size:13px">QoQ</span></div>
+    <div class="note">Lowest vacancy (5.2%) + rents +1.0% — strongest region</div>
+  </div>
+  <div class="card stat">
+    <div class="label">New Home Sales · Apr 2026</div>
+    <div class="value">1,548 <span style="font-size:13px">units</span></div>
+    <div class="note delta-up">+19.1% MoM — OCR launches drove the surge</div>
+  </div>
+  <div class="card stat">
+    <div class="label">2026 Launch Pipeline</div>
+    <div class="value">18 + 5 <span style="font-size:13px">EC</span></div>
+    <div class="note">ERA full-year forecast: 9,000–10,000 units</div>
+  </div>
+</div>
+
+<!-- ===== KEY DATES ===== -->
+<h2>Key Dates</h2>
+<div class="datebar" id="datebar"></div>
+
+<!-- ===== LAUNCH PIPELINE ===== -->
+<h2>New Launch Pipeline <span style="text-transform:none;letter-spacing:0">· sorted by next milestone</span></h2>
+<div class="grid pipeline">
+
+  <div class="card proj">
+    <div class="proj-head">
+      <h3><a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=07%20New%20Launches%2FTurf%20City%2FOverview">Dunearn House (Turf City)</a></h3>
+      <span class="badge b-ccr">D10 · CCR</span>
+    </div>
+    <div><span class="countdown" data-date="2026-07-01" data-label="Preview July 2026"></span></div>
+    <dl class="kv">
+      <dt>Developer</dt><dd>Frasers / Sekisui House / CSC Land</dd>
+      <dt>Units</dt><dd>380 · 5 blocks (10–19 sty)</dd>
+      <dt>Tenure</dt><dd>99-yr from 2025 · Est. TOP 2030</dd>
+      <dt>Est. PSF</dt><dd>~$3,000–3,100 indicative avg</dd>
+      <dt>Anchors</dt><dd>2BR $1.8xM · 3BR $2.6xM · 4BR $3.5xM</dd>
+    </dl>
+    <div class="hook">First residential launch in the Turf City precinct in 33 years. CRL Turf City station (~2032) = "6 MRT lines within 5 stops". ~500m to Sixth Avenue MRT (DTL). MGS / NYGH / HCI / NJC within 2km.</div>
+    <a class="obs-link" href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=07%20New%20Launches%2FTurf%20City%2FOverview">Open vault note →</a>
+  </div>
+
+  <div class="card proj">
+    <div class="proj-head">
+      <h3><a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=07%20New%20Launches%2FThomson%20Reserve%2FOverview">Thomson Reserve</a></h3>
+      <span class="badge b-rcr">D20 · RCR</span>
+    </div>
+    <div><span class="countdown" data-date="2026-09-15" data-label="Preview Sept/Oct 2026"></span></div>
+    <dl class="kv">
+      <dt>Developer</dt><dd>CapitaLand / UOL / SingLand</dd>
+      <dt>Units</dt><dd>1,268 · mega en-bloc (Thomson View)</dd>
+      <dt>Tenure</dt><dd>⚠️ TBC — verify before advising</dd>
+      <dt>Est. PSF</dt><dd>~$2,400–2,600 (ERA prelim.)</dd>
+      <dt>Anchors</dt><dd>2BR fr $1.4xM · 3BR fr $2.1M · 4BR fr $2.9M</dd>
+    </dl>
+    <div class="hook">"SML+ all-rounder": 1-min to Upper Thomson MRT (TEL, CRL later), within 1km of Ai Tong, Thomson Plaza + MacRitchie at doorstep. Land cost $1,178 psf ppr — lowest among recent comparable sites. ERA self-scores it 18/18 vs Jadescape 15.</div>
+    <a class="obs-link" href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=07%20New%20Launches%2FThomson%20Reserve%2FOverview">Open vault note →</a>
+  </div>
+
+  <div class="card proj">
+    <div class="proj-head">
+      <h3><a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=07%20New%20Launches%2FLucerne%20Grand%20UAS%2FOverview">Lucerne Grand 琉森嘉园</a></h3>
+      <span class="badge b-ocr">D22 · OCR</span>
+    </div>
+    <div><span class="countdown" data-date="2026-09-15" data-label="Preview Sept/Oct 2026"></span></div>
+    <dl class="kv">
+      <dt>Developer</dt><dd>CDL</dd>
+      <dt>Units</dt><dd>570 · 5 blocks × 17 sty + retail</dd>
+      <dt>Tenure</dt><dd>99-yr LH · TOP 3Q 2029</dd>
+      <dt>Pricing</dt><dd>⚠️ Not released yet</dd>
+      <dt>Mix</dt><dd>2BR 39% · 3BR 44% · 4BR 17%</dd>
+    </dl>
+    <div class="hook">Beside Lakeside MRT (EWL), Jurong Lake District transformation thesis (new Science Centre 2027). Ground-floor retail + 700 sqm supermarket. Within 1km of Rulang Primary. Site walk 29 Jun from Lakeside MRT.</div>
+    <a class="obs-link" href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=07%20New%20Launches%2FLucerne%20Grand%20UAS%2FOverview">Open vault note →</a>
+  </div>
+
+  <div class="card proj">
+    <div class="proj-head">
+      <h3><a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=07%20New%20Launches%2FUPPERHOUSE%2FOverview">UPPERHOUSE</a></h3>
+      <span class="badge b-ccr">D10 · CCR</span>
+    </div>
+    <div><span class="countdown warn" data-label="Launch TBC — no price list yet"></span></div>
+    <dl class="kv">
+      <dt>Developer</dt><dd>UOL Group</dd>
+      <dt>Address</dt><dd>22 Orchard Boulevard</dd>
+      <dt>Units</dt><dd>⚠️ Unconfirmed</dd>
+      <dt>Est. PSF</dt><dd>$3,200–3,600 (illustrative)</dd>
+      <dt>Land cost</dt><dd>$1,617 psf ppr (low for CCR)</dd>
+    </dl>
+    <div class="hook">"3 Perfects" pitch: Orchard Blvd MRT at doorstep, UOL's 0-unprofitable-launch track record, narrowed CCR-vs-OCR gap. Deck is mainly the Stretch &amp; Convert affordability toolkit — reusable for any budget objection.</div>
+    <a class="obs-link" href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=07%20New%20Launches%2FUPPERHOUSE%2FOverview">Open vault note →</a>
+  </div>
+
+  <div class="card proj">
+    <div class="proj-head">
+      <h3><a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=07%20New%20Launches%2FPromenade%20Peak%2FOverview">Promenade Peak</a></h3>
+      <span class="badge b-ccr">D09 · CCR</span>
+    </div>
+    <div><span class="countdown warn" data-label="⚠️ Deck Jul 2025 — verify current status"></span></div>
+    <dl class="kv">
+      <dt>Developer</dt><dd>Allgreen Properties</dd>
+      <dt>Units</dt><dd>596 · 63-storey tower (240m SHD)</dd>
+      <dt>Tenure</dt><dd>99-yr LH</dd>
+      <dt>Est. PSF</dt><dd>~$2,600–3,500 (prelim. matrix)</dd>
+      <dt>Anchors</dt><dd>1BR+S ~$1.47M · 2BR ~$1.84M · 3BR ~$3.0M</dd>
+    </dl>
+    <div class="hook">Tallest full-residential tower pitch; 2 min to Great World MRT, 4 min to Havelock. Only 6 stacks, each with private lift. Sky pool higher than MBS SkyPark. 99-yr-vs-FH objection handler: Martin Modern +29% beat nearby freeholds.</div>
+    <a class="obs-link" href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=07%20New%20Launches%2FPromenade%20Peak%2FOverview">Open vault note →</a>
+  </div>
+</div>
+
+<!-- ===== PRICE ANCHORS ===== -->
+<h2>Price Anchors Across the Pipeline <span style="text-transform:none;letter-spacing:0">· preliminary / illustrative — not official price lists</span></h2>
+<div class="card" style="overflow-x:auto">
+  <table>
+    <thead><tr><th>Project</th><th>Region</th><th class="num">Est. PSF</th><th class="num">2BR from</th><th class="num">3BR from</th><th class="num">4BR from</th><th>Preview</th></tr></thead>
+    <tbody>
+      <tr><td><b>Dunearn House</b></td><td><span class="badge b-ccr">CCR</span></td><td class="num">~$3,000–3,100</td><td class="num">$1.8xM <span class="meta">(657sf)</span></td><td class="num">$2.6xM <span class="meta">(872sf)</span></td><td class="num">$3.5xM <span class="meta">(1,184sf)</span></td><td>Jul 2026</td></tr>
+      <tr><td><b>Thomson Reserve</b></td><td><span class="badge b-rcr">RCR</span></td><td class="num">~$2,400–2,600</td><td class="num">$1.4xM <span class="meta">(581sf)</span></td><td class="num">$2.1xM <span class="meta">(818sf)</span></td><td class="num">$2.9xM <span class="meta">(1,173sf)</span></td><td>Sept/Oct 2026</td></tr>
+      <tr><td><b>Lucerne Grand</b></td><td><span class="badge b-ocr">OCR</span></td><td class="num">TBC</td><td class="num">TBC <span class="meta">(620–710sf)</span></td><td class="num">TBC <span class="meta">(870–1,000sf)</span></td><td class="num">TBC <span class="meta">(1,140–1,430sf)</span></td><td>Sept/Oct 2026</td></tr>
+      <tr><td><b>Promenade Peak</b></td><td><span class="badge b-ccr">CCR</span></td><td class="num">~$2,600–3,500</td><td class="num">~$1.84M <span class="meta">(657sf)</span></td><td class="num">~$3.0M <span class="meta">(1,076sf)</span></td><td class="num">~$4.5xM <span class="meta">(1,421sf)</span></td><td>⚠️ verify</td></tr>
+      <tr><td><b>UPPERHOUSE</b></td><td><span class="badge b-ccr">CCR</span></td><td class="num">$3,200–3,600</td><td class="num">~$2.24–2.52M <span class="meta">(700sf)</span></td><td class="num">~$3.24–3.64M <span class="meta">(1,012sf)</span></td><td class="num">—</td><td>TBC</td></tr>
+    </tbody>
+  </table>
+  <div class="fine">Recent take-up benchmarks: Tengah Garden Residences 99% @ $2,111 psf median · Vela Bay 72% @ $2,886 psf · Skye at Holland 99% @ $2,953 psf · LyndenWoods 94.5% @ $2,450 psf.</div>
+</div>
+
+<!-- ===== MARKET PULSE DETAIL ===== -->
+<h2>Market Pulse · 1Q 2026 (URA final, 24 Apr 2026)</h2>
+<div class="two-col">
+  <div class="card">
+    <table>
+      <thead><tr><th>Segment</th><th class="num">1Q26 QoQ</th><th class="num">4Q25 QoQ</th><th class="num">Vacancy</th><th class="num">Rents 1Q26</th></tr></thead>
+      <tbody>
+        <tr><td><b>Overall</b></td><td class="num"><span class="pill up">+0.9%</span></td><td class="num">+0.6%</td><td class="num">6.2%</td><td class="num"><span class="pill up">+0.3%</span></td></tr>
+        <tr><td><span class="badge b-ccr">CCR</span></td><td class="num"><span class="pill up">+0.6%</span></td><td class="num"><span class="pill down">−3.5%</span></td><td class="num">8.2% ⚠️</td><td class="num"><span class="pill up">+0.6%</span></td></tr>
+        <tr><td><span class="badge b-rcr">RCR</span></td><td class="num"><span class="pill up">+0.8%</span></td><td class="num">+0.7%</td><td class="num">6.3%</td><td class="num"><span class="pill up">+0.8%</span></td></tr>
+        <tr><td><span class="badge b-ocr">OCR</span></td><td class="num"><span class="pill up">+2.2%</span></td><td class="num">+1.0%</td><td class="num">5.2%</td><td class="num"><span class="pill up">+1.0%</span></td></tr>
+        <tr><td>Landed</td><td class="num"><span class="pill down">−0.4%</span></td><td class="num">+3.4%</td><td class="num">—</td><td class="num"><span class="pill up">+0.1%</span></td></tr>
+      </tbody>
+    </table>
+    <div class="fine">Transaction volume fell ~40% QoQ. Supply pipeline: ~55,800 units completing in coming years + ~4,600 via 1H2026 GLS. Source: <a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=04%20Market%20Research%2FURA%20Statistics%2F2026-1Q%20Private%20Residential%20Price%20Index" style="color:var(--accent)">1Q26 PPI note</a>.</div>
+  </div>
+  <div class="card">
+    <b style="font-size:14px">Talking points for clients</b>
+    <ul style="margin:10px 0 0 18px;font-size:13.5px;display:flex;flex-direction:column;gap:8px">
+      <li><b>OCR momentum is real:</b> prices +2.2%, rents +1.0%, vacancy lowest at 5.2% — supports the Lucerne Grand / JLD thesis and HDB-upgrader conversations.</li>
+      <li><b>CCR recovering but watch vacancy:</b> swung −3.5% → +0.6%, yet vacancy is highest at 8.2%. Build vacancy buffer into CCR rental-yield projections (Dunearn House, UPPERHOUSE, Promenade Peak).</li>
+      <li><b>Demand is selective, not euphoric:</b> Apr's 1,548 sales were concentrated in location+value launches (Tengah 99%, Vela Bay 72%). Position pipeline projects on fundamentals, not FOMO.</li>
+      <li><b>Buyers are local:</b> 88.9% Singaporean, 9.6% PR, 1.5% foreigner (Apr 2026) — ABSD-sensitive structuring (decoupling, 1st-property timing) matters more than ever.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===== CALCULATOR ===== -->
+<h2 id="calc">Stamp Duty &amp; Mortgage Quick Calc</h2>
+<div class="card">
+  <div class="calc-grid">
+    <div class="field"><label>Purchase price (S$)</label><input type="text" id="price" value="2,100,000" inputmode="numeric"></div>
+    <div class="field"><label>Buyer profile</label>
+      <select id="profile">
+        <option value="0" selected>SC — 1st property (0%)</option>
+        <option value="20">SC — 2nd property (20%)</option>
+        <option value="30">SC — 3rd+ property (30%)</option>
+        <option value="5">PR — 1st property (5%)</option>
+        <option value="30">PR — 2nd property (30%)</option>
+        <option value="35">PR — 3rd+ property (35%)</option>
+        <option value="60">Foreigner (60%)</option>
+        <option value="65">Entity (65%)</option>
+      </select>
+    </div>
+    <div class="field"><label>Loan-to-value %</label><input type="number" id="ltv" value="75" min="0" max="75"></div>
+    <div class="field"><label>Interest rate % p.a.</label><input type="number" id="rate" value="2.3" step="0.05"></div>
+    <div class="field"><label>Tenure (years)</label><input type="number" id="tenure" value="30" min="5" max="35"></div>
+  </div>
+  <div class="results">
+    <div class="res"><div class="label">BSD</div><div class="value" id="bsd">—</div></div>
+    <div class="res"><div class="label">ABSD</div><div class="value" id="absd">—</div></div>
+    <div class="res"><div class="label">Total stamp duty</div><div class="value" id="total">—</div></div>
+    <div class="res"><div class="label">Cash/CPF downpayment</div><div class="value" id="down">—</div></div>
+    <div class="res"><div class="label">Loan amount</div><div class="value" id="loan">—</div></div>
+    <div class="res"><div class="label">Est. monthly payment</div><div class="value" id="monthly">—</div></div>
+  </div>
+  <div class="fine">
+    BSD: 1% / 2% / 3% / 4% / 5% / 6% progressive tiers (residential). ABSD per Apr 2023 schedule.
+    <b>SSD (bought on/after 4 Jul 2025):</b> 16% ≤1yr · 12% 1–2yr · 8% 2–3yr · 4% 3–4yr · 0% after 4yrs.
+    Estimates only — verify with <a href="https://www.iras.gov.sg" style="color:var(--accent)">IRAS</a> and the bank's IPA before advising clients.
+  </div>
+</div>
+
+<!-- ===== FOLLOW-UPS ===== -->
+<h2>Follow-ups &amp; Verification Queue <span style="text-transform:none;letter-spacing:0">· ticks are saved on this Mac</span></h2>
+<div class="card">
+  <ul class="todo" id="todo">
+    <li data-id="lucerne-sitewalk"><input type="checkbox"><span><b>29 Jun:</b> Lucerne Grand site walk from Lakeside MRT — RSVP and block calendar.</span></li>
+    <li data-id="dunearn-ballot"><input type="checkbox"><span><b>July preview:</b> shortlist + register clients for Dunearn House ballot; prep CCR price-gap pitch ($3,000 psf vs UPPERHOUSE $3,431 psf 4BR starting).</span></li>
+    <li data-id="tr-tenure"><input type="checkbox"><span><b>Verify:</b> Thomson Reserve tenure (former Thomson View site) — materially affects every investment analysis.</span></li>
+    <li data-id="pp-status"><input type="checkbox"><span><b>Verify:</b> Promenade Peak current launch/sales status — deck is from Jul 2025, pricing may be stale.</span></li>
+    <li data-id="crl-timeline"><input type="checkbox"><span><b>Verify:</b> CRL "Turf City 2032" timeline against latest LTA announcements before repeating to clients.</span></li>
+    <li data-id="ssd-note"><input type="checkbox"><span><b>Vault fix:</b> Stamp Duty Reference still shows pre-Jul-2025 SSD (12/8/4%, 3yrs) — update to 16/12/8/4% over 4yrs.</span></li>
+    <li data-id="comps-log"><input type="checkbox"><span><b>Habit:</b> Comps Log is empty — start logging caveats from each CMA so PSF trend analysis becomes possible.</span></li>
+  </ul>
+</div>
+
+<!-- ===== QUICK LINKS ===== -->
+<h2>Vault Quick Links</h2>
+<div class="links">
+  <a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=07%20New%20Launches%2F00%20New%20Launches%20MOC">📋 New Launches MOC</a>
+  <a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=02%20Market%20Research%2FComps%20Log">📊 Comps Log</a>
+  <a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=04%20Market%20Research%2FURA%20Statistics%2FPPI%20Time%20Series">📈 PPI Time Series</a>
+  <a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=04%20Market%20Research%2FERA%20Research%2F00%20ERA%20Research%20MOC">🏢 ERA Research</a>
+  <a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=99%20Resources%2FStamp%20Duty%20Reference">🧾 Stamp Duty Reference</a>
+  <a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=99%20Resources%2FSingapore%20Districts%20Reference">🗺️ Districts D01–D28</a>
+  <a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=99%20Resources%2FSales%20Training%2F00%20Sales%20Training%20MOC">🎓 Sales Training</a>
+  <a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=99%20Resources%2FChecklists%2FClosing%20Checklist">✅ Closing Checklist</a>
+</div>
+
+</div>
+<script>
+// ---- date header + countdown chips ----
+const now = new Date();
+document.getElementById('today').textContent = now.toLocaleDateString('en-SG',{weekday:'long', day:'numeric', month:'long', year:'numeric'});
+document.querySelectorAll('.countdown[data-date]').forEach(el=>{
+  const target = new Date(el.dataset.date+'T00:00:00');
+  const days = Math.ceil((target - now)/86400000);
+  const label = el.dataset.label;
+  el.textContent = days > 0 ? `${label} · ~${days}d away` : label;
+});
+document.querySelectorAll('.countdown:not([data-date])').forEach(el=>{ el.textContent = el.dataset.label; });
+
+// ---- key dates bar ----
+const keyDates = [
+  {d:'2026-06-29', t:'Lucerne Grand site walk', s:'Meet at Lakeside MRT'},
+  {d:'2026-06-28', t:'Lucerne roadshows end', s:'JEM/Westgate · Taman Jurong · J-Walk'},
+  {d:'2026-07-15', t:'Dunearn House preview', s:'July 2026 (date TBC)'},
+  {d:'2026-09-15', t:'Thomson Reserve preview', s:'Sept/Oct 2026 window'},
+  {d:'2026-09-15', t:'Lucerne Grand preview', s:'Sept/Oct 2026 window'},
+];
+document.getElementById('datebar').innerHTML = keyDates
+  .sort((a,b)=>a.d.localeCompare(b.d))
+  .map(k=>{
+    const days = Math.ceil((new Date(k.d+'T00:00:00') - now)/86400000);
+    const when = days < 0 ? 'passed' : days === 0 ? 'TODAY' : `in ~${days} days`;
+    return `<div class="date-chip"><span class="when">${when}</span><b>${k.t}</b><span class="meta">${k.s}</span></div>`;
+  }).join('');
+
+// ---- stamp duty + mortgage calculator ----
+const $ = id => document.getElementById(id);
+const fmt = n => 'S$' + Math.round(n).toLocaleString('en-SG');
+function bsdCalc(p){
+  const tiers = [[180000,.01],[180000,.02],[640000,.03],[500000,.04],[1500000,.05],[Infinity,.06]];
+  let due = 0, left = p;
+  for (const [band, rate] of tiers){
+    const amt = Math.min(left, band);
+    due += amt * rate; left -= amt;
+    if (left <= 0) break;
+  }
+  return due;
+}
+function recalc(){
+  const p = parseFloat($('price').value.replace(/[^0-9.]/g,'')) || 0;
+  const absdRate = parseFloat($('profile').value)/100;
+  const ltv = Math.min(parseFloat($('ltv').value)||0, 75)/100;
+  const rate = (parseFloat($('rate').value)||0)/100/12;
+  const n = (parseFloat($('tenure').value)||30)*12;
+  const bsd = bsdCalc(p), absd = p*absdRate, loan = p*ltv;
+  const monthly = rate > 0 ? loan*rate/(1-Math.pow(1+rate,-n)) : loan/n;
+  $('bsd').textContent = fmt(bsd);
+  $('absd').textContent = fmt(absd);
+  $('total').textContent = fmt(bsd+absd);
+  $('down').textContent = fmt(p-loan);
+  $('loan').textContent = fmt(loan);
+  $('monthly').textContent = fmt(monthly) + '/mth';
+}
+['price','profile','ltv','rate','tenure'].forEach(id=>$(id).addEventListener('input',recalc));
+$('price').addEventListener('blur',e=>{
+  const v = parseFloat(e.target.value.replace(/[^0-9.]/g,''))||0;
+  e.target.value = v.toLocaleString('en-SG');
+});
+recalc();
+
+// ---- follow-up checklist persistence ----
+const KEY = 'sg-re-dashboard-todos';
+const saved = JSON.parse(localStorage.getItem(KEY)||'{}');
+document.querySelectorAll('#todo li').forEach(li=>{
+  const cb = li.querySelector('input');
+  if (saved[li.dataset.id]) { cb.checked = true; li.classList.add('done'); }
+  cb.addEventListener('change',()=>{
+    li.classList.toggle('done', cb.checked);
+    saved[li.dataset.id] = cb.checked;
+    localStorage.setItem(KEY, JSON.stringify(saved));
+  });
+});
+</script>
+</body>
+</html>

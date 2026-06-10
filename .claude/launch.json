@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dashboard",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-I", "-c", "import os,http.server,socketserver; os.chdir('/tmp/dashprev'); s=socketserver.TCPServer(('127.0.0.1',8765),http.server.SimpleHTTPRequestHandler); print('up',flush=True); s.serve_forever()"],
+      "port": 8765
+    }
+  ]
+}
