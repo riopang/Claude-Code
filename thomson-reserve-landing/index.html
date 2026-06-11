@@ -370,8 +370,21 @@
       })
     });
 
+    // 3. Submit to Make.com webhook (powers Google Sheets CRM log)
+    const makeSubmit = fetch('https://hook.eu1.make.com/01r4o8xc4ixnf7lw124voss3s6pk4nbp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        timestamp: new Date().toISOString(),
+        name: data.get('name'),
+        phone: data.get('phone'),
+        email: data.get('email'),
+        message: data.get('message')
+      })
+    });
+
     try{
-      await Promise.all([netlifySubmit, telegramSubmit]);
+      await Promise.all([netlifySubmit, telegramSubmit, makeSubmit]);
       msg.style.color = 'var(--gold-light)';
       msg.textContent = "Thank you! We've received your details and will be in touch shortly with VVIP pricing.";
       form.reset();
