@@ -17,13 +17,14 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: 'Invalid JSON' };
   }
 
-  const { name, phone, purpose, budget } = data;
+  const { name, phone, purpose, property, budget } = data;
 
   const text =
     `🏠 *New Lead — Thomson Reserve*\n\n` +
     `*Name:* ${name || '-'}\n` +
     `*Phone:* ${phone || '-'}\n` +
     `*Own Stay/Investment:* ${purpose || '-'}\n` +
+    `*Current Property:* ${property || '-'}\n` +
     `*Budget:* ${budget || '-'}`;
 
   const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {

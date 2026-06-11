@@ -332,6 +332,16 @@
           </select>
         </div>
         <div class="field">
+          <label for="property">Current Property Owned</label>
+          <select id="property" name="property" required>
+            <option value="" disabled selected>Select one</option>
+            <option value="HDB">HDB</option>
+            <option value="Private Condo/Apartment">Private Condo/Apartment</option>
+            <option value="Landed Property">Landed Property</option>
+            <option value="None / First-Time Buyer">None / First-Time Buyer</option>
+          </select>
+        </div>
+        <div class="field">
           <label for="budget">Budget Range</label>
           <select id="budget" name="budget" required>
             <option value="" disabled selected>Select one</option>
@@ -380,6 +390,7 @@
         name: data.get('name'),
         phone: data.get('phone'),
         purpose: data.get('purpose'),
+        property: data.get('property'),
         budget: data.get('budget')
       })
     });
@@ -393,6 +404,7 @@
         name: data.get('name'),
         phone: data.get('phone'),
         purpose: data.get('purpose'),
+        property: data.get('property'),
         budget: data.get('budget')
       })
     });
