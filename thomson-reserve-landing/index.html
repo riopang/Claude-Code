@@ -5,126 +5,333 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Thomson Reserve | New Launch Condo at Upper Thomson MRT</title>
 <meta name="description" content="Thomson Reserve - New launch by UOL, SingLand & CapitaLand at Bright Hill Drive, 1-min walk to Upper Thomson MRT. Register your interest for VVIP preview & priority pricing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --gold:#b89456;
-    --dark:#1a2a2e;
-    --cream:#f7f4ee;
+    --gold:#bd9a5f;
+    --gold-light:#e6cfa0;
+    --dark:#13211f;
+    --dark2:#1c302d;
+    --cream:#faf7f1;
+    --ink:#2b3331;
   }
-  *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;}
-  body{background:var(--cream);color:var(--dark);line-height:1.6;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--cream);color:var(--ink);line-height:1.7;
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Playfair Display',Georgia,serif;}
+
+  /* Top bar */
+  .topbar{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 28px;background:rgba(19,33,31,.0);
+    transition:background .3s ease, box-shadow .3s ease, padding .3s ease;
+  }
+  .topbar.scrolled{background:rgba(19,33,31,.92);backdrop-filter:blur(8px);padding:10px 28px;box-shadow:0 4px 18px rgba(0,0,0,.15);}
+  .topbar .brand{color:#fff;font-family:'Playfair Display',serif;font-size:1.25rem;letter-spacing:3px;font-weight:600;}
+  .topbar .brand span{color:var(--gold-light);}
+  .topbar .nav-cta{
+    background:var(--gold);color:var(--dark);font-weight:600;font-size:.85rem;
+    padding:10px 20px;border-radius:30px;text-decoration:none;letter-spacing:.5px;
+    transition:.2s;
+  }
+  .topbar .nav-cta:hover{background:var(--gold-light);}
+
+  /* Hero */
   .hero{
-    background:linear-gradient(rgba(20,30,33,.55),rgba(20,30,33,.75)),
-      url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
-    color:#fff;text-align:center;padding:80px 20px 60px;
+    position:relative;min-height:100vh;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;color:#fff;
+    padding:120px 20px 80px;overflow:hidden;
   }
-  .hero h1{font-size:2.6rem;letter-spacing:2px;margin-bottom:10px;}
-  .hero p.tag{font-size:1.1rem;color:var(--gold);font-weight:600;letter-spacing:3px;text-transform:uppercase;margin-bottom:18px;}
-  .hero p.sub{font-size:1.15rem;max-width:680px;margin:0 auto 30px;opacity:.95;}
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(180deg,rgba(15,25,24,.45) 0%,rgba(15,25,24,.55) 50%,rgba(15,25,24,.85) 100%),
+      url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
+    transform:scale(1.05);
+    z-index:-1;
+  }
+  .hero .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    font-size:.8rem;letter-spacing:4px;text-transform:uppercase;
+    color:var(--gold-light);font-weight:600;margin-bottom:22px;
+    border:1px solid rgba(230,207,160,.4);padding:8px 20px;border-radius:30px;
+    background:rgba(255,255,255,.04);
+  }
+  .hero h1{
+    font-size:clamp(2.6rem,7vw,5rem);font-weight:700;letter-spacing:6px;
+    margin-bottom:14px;text-shadow:0 4px 30px rgba(0,0,0,.35);
+  }
+  .hero .subtitle{
+    font-size:clamp(1rem,2vw,1.2rem);max-width:680px;margin:0 auto 36px;
+    opacity:.92;font-weight:400;
+  }
+  .hero .subtitle strong{color:var(--gold-light);font-weight:600;}
+  .hero-meta{
+    display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-bottom:40px;
+  }
+  .hero-meta .pill{
+    font-size:.78rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;
+    color:#fff;border:1px solid rgba(255,255,255,.25);padding:8px 18px;border-radius:30px;
+    background:rgba(255,255,255,.06);
+  }
+  .scroll-cue{
+    position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+    color:rgba(255,255,255,.6);font-size:.7rem;letter-spacing:3px;text-transform:uppercase;
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+    animation:bob 2.2s ease-in-out infinite;
+  }
+  .scroll-cue::after{
+    content:"";width:1px;height:34px;background:linear-gradient(rgba(255,255,255,.7),transparent);
+  }
+  @keyframes bob{0%,100%{transform:translate(-50%,0);}50%{transform:translate(-50%,8px);}}
+
+  /* Buttons */
   .cta{
-    display:inline-block;background:var(--gold);color:#1a2a2e;font-weight:700;
-    padding:16px 38px;border-radius:4px;text-decoration:none;font-size:1.05rem;
-    letter-spacing:1px;transition:.2s;border:none;cursor:pointer;
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--gold);color:var(--dark);font-weight:700;
+    padding:17px 40px;border-radius:40px;text-decoration:none;font-size:1rem;
+    letter-spacing:1px;transition:.25s ease;border:none;cursor:pointer;
+    box-shadow:0 10px 30px rgba(189,154,95,.35);
   }
-  .cta:hover{background:#cca964;}
-  section{max-width:920px;margin:0 auto;padding:50px 24px;}
-  h2{font-size:1.8rem;margin-bottom:18px;border-left:5px solid var(--gold);padding-left:14px;}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:20px;}
-  .card{background:#fff;border-radius:8px;padding:22px;box-shadow:0 2px 10px rgba(0,0,0,.05);}
-  .card h3{color:var(--gold);font-size:1rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
-  .card p{font-size:.98rem;}
-  table{width:100%;border-collapse:collapse;margin-top:16px;background:#fff;border-radius:8px;overflow:hidden;}
-  th,td{padding:12px 14px;text-align:left;border-bottom:1px solid #eee;font-size:.95rem;}
-  th{background:var(--dark);color:#fff;font-weight:600;}
-  tr:nth-child(even){background:#fafafa;}
-  .disclaimer{font-size:.8rem;color:#777;font-style:italic;margin-top:14px;}
-  .form-section{background:var(--dark);color:#fff;}
-  .form-section h2{color:#fff;border-color:var(--gold);}
-  form{display:grid;gap:14px;max-width:480px;margin-top:20px;}
+  .cta:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 14px 36px rgba(189,154,95,.45);}
+  .cta:active{transform:translateY(0);}
+
+  /* Sections */
+  section{max-width:1040px;margin:0 auto;padding:90px 24px;}
+  .section-head{text-align:center;max-width:680px;margin:0 auto 48px;}
+  .section-head .kicker{
+    display:block;color:var(--gold);font-weight:700;letter-spacing:4px;
+    text-transform:uppercase;font-size:.78rem;margin-bottom:12px;
+  }
+  .section-head h2{font-size:clamp(1.8rem,4vw,2.6rem);color:var(--dark);font-weight:600;}
+  .section-head p{margin-top:14px;color:#5d6663;font-size:1.02rem;}
+
+  /* Feature grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;}
+  .card{
+    background:#fff;border-radius:14px;padding:32px 26px;
+    box-shadow:0 6px 24px rgba(20,40,38,.06);border:1px solid #efe9dd;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .card:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(20,40,38,.1);}
+  .card .icon{
+    width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--gold),var(--gold-light));
+    display:flex;align-items:center;justify-content:center;margin-bottom:18px;
+    color:#fff;
+  }
+  .card .icon svg{width:24px;height:24px;}
+  .card h3{font-size:1.05rem;color:var(--dark);margin-bottom:8px;font-weight:600;letter-spacing:.5px;}
+  .card p{font-size:.96rem;color:#5d6663;}
+
+  /* Value / pricing section */
+  .value-section{background:var(--dark);color:#f3efe6;border-radius:24px;max-width:1040px;margin:0 auto;}
+  .value-section .section-head h2{color:#fff;}
+  .value-section .section-head p{color:#cdd6d3;}
+  .value-section .kicker{color:var(--gold-light);}
+  .value-section p.body-text{font-size:1.05rem;color:#e7e2d8;max-width:760px;margin:0 auto 28px;text-align:center;}
+  .value-section p.body-text strong{color:var(--gold-light);}
+  .badges{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+  .badge{
+    display:inline-block;background:rgba(230,207,160,.1);color:var(--gold-light);
+    border:1px solid rgba(230,207,160,.35);
+    border-radius:30px;padding:8px 20px;font-size:.82rem;letter-spacing:.5px;font-weight:500;
+  }
+
+  /* Pricing table */
+  .table-wrap{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 6px 24px rgba(20,40,38,.06);border:1px solid #efe9dd;}
+  table{width:100%;border-collapse:collapse;}
+  th,td{padding:16px 20px;text-align:left;font-size:.95rem;}
+  th{background:var(--dark2);color:#fff;font-weight:600;letter-spacing:.5px;font-size:.82rem;text-transform:uppercase;}
+  td{border-bottom:1px solid #f0ebe0;color:var(--ink);}
+  tr:last-child td{border-bottom:none;}
+  tr:nth-child(even) td{background:#fbf8f2;}
+  td:last-child{font-weight:600;color:var(--dark);}
+  .disclaimer{font-size:.82rem;color:#9aa19e;font-style:italic;margin-top:18px;text-align:center;}
+
+  /* Form section */
+  .form-section{
+    background:linear-gradient(135deg,var(--dark) 0%,var(--dark2) 100%);
+    color:#fff;border-radius:24px;max-width:1040px;margin:0 auto;
+  }
+  .form-section .section-head h2{color:#fff;}
+  .form-section .section-head p{color:#cdd6d3;}
+  .form-wrap{display:flex;gap:48px;flex-wrap:wrap;align-items:flex-start;justify-content:center;}
+  .form-wrap > div{flex:1 1 380px;max-width:480px;}
+  .perks{list-style:none;display:flex;flex-direction:column;gap:16px;}
+  .perks li{display:flex;gap:12px;align-items:flex-start;color:#e7e2d8;font-size:.98rem;}
+  .perks li .check{
+    flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--gold);
+    display:flex;align-items:center;justify-content:center;margin-top:2px;
+  }
+  .perks li .check svg{width:12px;height:12px;}
+  form{display:grid;gap:16px;}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field label{font-size:.78rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
   input,textarea{
-    padding:13px 14px;border-radius:4px;border:1px solid #3a4a4e;
-    background:#243438;color:#fff;font-size:1rem;
+    padding:14px 16px;border-radius:8px;border:1px solid #3a4a47;
+    background:rgba(255,255,255,.04);color:#fff;font-size:1rem;font-family:inherit;
+    transition:border-color .2s, background .2s;
   }
-  input::placeholder,textarea::placeholder{color:#9aa;}
-  .form-msg{margin-top:14px;font-size:.95rem;}
-  footer{text-align:center;padding:30px;font-size:.85rem;color:#888;}
-  .badge{display:inline-block;background:rgba(184,148,86,.15);color:var(--gold);border:1px solid var(--gold);
-    border-radius:20px;padding:4px 14px;font-size:.8rem;margin:4px;}
+  input:focus,textarea:focus{outline:none;border-color:var(--gold);background:rgba(255,255,255,.07);}
+  input::placeholder,textarea::placeholder{color:#7c8884;}
+  form .cta{justify-content:center;margin-top:6px;}
+  .form-msg{margin-top:16px;font-size:.95rem;min-height:1.4em;}
+
+  footer{text-align:center;padding:40px 24px;font-size:.85rem;color:#9aa19e;}
+
+  @media(max-width:640px){
+    section{padding:64px 20px;}
+    .topbar{padding:14px 18px;}
+  }
 </style>
 </head>
 <body>
 
+<div class="topbar" id="topbar">
+  <div class="brand">THOMSON <span>RESERVE</span></div>
+  <a href="#register" class="nav-cta">Register Interest</a>
+</div>
+
 <div class="hero">
-  <p class="tag">VVIP Preview · Register Now</p>
+  <p class="eyebrow">VVIP Preview · Limited Slots</p>
   <h1>THOMSON RESERVE</h1>
-  <p class="sub">A new mega-development by UOL Group, SingLand &amp; CapitaLand Development —
+  <p class="subtitle">A new mega-development by <strong>UOL Group, SingLand &amp; CapitaLand Development</strong> —
   1-minute walk to Upper Thomson MRT (TE8), within 1km of Ai Tong School.
-  RCR address, OCR-level pricing.</p>
-  <a href="#register" class="cta">Get VVIP Priority Pricing &amp; Floor Plans</a>
+  A rare RCR address at OCR-level pricing.</p>
+  <div class="hero-meta">
+    <span class="pill">District 20 · RCR</span>
+    <span class="pill">Fresh 99-Yr Leasehold</span>
+    <span class="pill">~1,268 Units</span>
+    <span class="pill">Preview 3Q 2026</span>
+  </div>
+  <a href="#register" class="cta">Get VVIP Priority Pricing &amp; Floor Plans →</a>
+  <div class="scroll-cue">Scroll</div>
 </div>
 
 <section>
-  <h2>Why Thomson Reserve</h2>
+  <div class="section-head">
+    <span class="kicker">The Opportunity</span>
+    <h2>Why Thomson Reserve</h2>
+    <p>Thomson Reserve checks every box of the classic Singapore capital-appreciation framework — Schools, MRT, Large development — plus a few rare extras.</p>
+  </div>
   <div class="grid">
     <div class="card">
-      <h3>Schools</h3>
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      </div>
+      <h3>Top School Within 1km</h3>
       <p>Within 1km of Ai Tong School — strong, durable demand from upgrader families.</p>
     </div>
     <div class="card">
-      <h3>MRT</h3>
-      <p>~1-minute walk to Upper Thomson MRT (TE8), Thomson-East Coast Line — direct to Orchard, Marina Bay &amp; CBD.</p>
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <h3>1-Minute to MRT</h3>
+      <p>Direct, sheltered access to Upper Thomson MRT (TE8) — straight to Orchard, Marina Bay &amp; the CBD.</p>
     </div>
     <div class="card">
-      <h3>Large Mega-Development</h3>
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>
+      </div>
+      <h3>Mega Development</h3>
       <p>~1,268 units across ~540,000 sqft — full condo facilities, low density, generous landscaping.</p>
     </div>
     <div class="card">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      </div>
       <h3>Lifestyle &amp; Greenery</h3>
-      <p>Thomson Plaza, MacRitchie Reservoir &amp; Windsor Nature Park at your doorstep.</p>
+      <p>Thomson Plaza, MacRitchie Reservoir &amp; Windsor Nature Park right at your doorstep.</p>
     </div>
   </div>
 </section>
 
-<section>
-  <h2>RCR Address, OCR Pricing</h2>
-  <p>Thomson Reserve's site was secured at <strong>$1,178 psf ppr</strong> — lower than recent
-  <em>suburban (OCR)</em> land sales like Lentor Central ($1,278 psf ppr) and Bedok Rise ($1,330 psf ppr).
+<section class="value-section">
+  <div class="section-head">
+    <span class="kicker">The Core Thesis</span>
+    <h2>RCR Address, OCR Pricing</h2>
+  </div>
+  <p class="body-text">Thomson Reserve's site was secured at <strong>$1,178 psf ppr</strong> — lower than recent
+  suburban (OCR) land sales like Lentor Central ($1,278 psf ppr) and Bedok Rise ($1,330 psf ppr).
   This rare land-cost advantage is the foundation of an attractive launch price for a city-fringe,
   MRT-doorstep address.</p>
-  <div class="badge">Fresh 99-year leasehold</div>
-  <div class="badge">~1,268 units</div>
-  <div class="badge">District 20 (RCR)</div>
-  <div class="badge">Target Preview 3Q 2026</div>
+  <div class="badges">
+    <div class="badge">Fresh 99-year leasehold</div>
+    <div class="badge">~1,268 units · ~540,000 sqft</div>
+    <div class="badge">District 20 (RCR)</div>
+    <div class="badge">Target Preview 3Q 2026</div>
+  </div>
 </section>
 
 <section>
-  <h2>Indicative Pricing</h2>
-  <table>
-    <tr><th>Unit Type</th><th>Est. Size (sqft)</th><th>Indicative From</th></tr>
-    <tr><td>2 Bedroom</td><td>581</td><td>~$1.4x mil</td></tr>
-    <tr><td>2 Bedroom Premium</td><td>667</td><td>~$1.7x mil</td></tr>
-    <tr><td>3 Bedroom</td><td>818</td><td>~$2.1x mil</td></tr>
-    <tr><td>3 Bedroom Premium</td><td>915</td><td>~$2.3x mil</td></tr>
-    <tr><td>4 Bedroom</td><td>1,173</td><td>~$2.9x mil</td></tr>
-  </table>
+  <div class="section-head">
+    <span class="kicker">Indicative Pricing</span>
+    <h2>Unit Mix &amp; Pricing</h2>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Unit Type</th><th>Est. Size (sqft)</th><th>Indicative From</th></tr>
+      <tr><td>2 Bedroom</td><td>581</td><td>~$1.4x mil</td></tr>
+      <tr><td>2 Bedroom Premium</td><td>667</td><td>~$1.7x mil</td></tr>
+      <tr><td>3 Bedroom</td><td>818</td><td>~$2.1x mil</td></tr>
+      <tr><td>3 Bedroom Premium</td><td>915</td><td>~$2.3x mil</td></tr>
+      <tr><td>4 Bedroom</td><td>1,173</td><td>~$2.9x mil</td></tr>
+    </table>
+  </div>
   <p class="disclaimer">All prices, sizes and unit counts are indicative/estimated pending the developer's
   official release. Actual figures subject to developer's official launch.</p>
 </section>
 
 <section class="form-section" id="register">
-  <h2>Register Your Interest</h2>
-  <p>Be among the first to receive the e-brochure, floor plans, VVIP preview invite and priority pricing
-  before public launch.</p>
-  <form id="leadForm" name="thomson-reserve-leads" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-    <input type="hidden" name="form-name" value="thomson-reserve-leads" />
-    <p style="display:none"><label>Don't fill this out: <input name="bot-field" /></label></p>
-    <input type="text" name="name" placeholder="Full Name" required>
-    <input type="tel" name="phone" placeholder="Mobile Number (e.g. 9123 4567)" required>
-    <input type="email" name="email" placeholder="Email Address" required>
-    <textarea name="message" placeholder="Tell us about your requirements (e.g. unit type, budget, own-stay or investment)" rows="3"></textarea>
-    <button type="submit" class="cta">Submit &amp; Get VVIP Pricing</button>
-  </form>
-  <div class="form-msg" id="formMsg"></div>
+  <div class="section-head">
+    <span class="kicker">Limited VVIP Slots</span>
+    <h2>Register Your Interest</h2>
+  </div>
+  <div class="form-wrap">
+    <div>
+      <ul class="perks">
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="#13211f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          First access to the e-brochure &amp; full floor plans</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="#13211f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          VVIP preview invite before public launch</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="#13211f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          Priority unit selection &amp; pricing</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="#13211f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          1-on-1 consultation tailored to your budget &amp; goals</li>
+      </ul>
+    </div>
+    <div>
+      <form id="leadForm" name="thomson-reserve-leads" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="thomson-reserve-leads" />
+        <p style="display:none"><label>Don't fill this out: <input name="bot-field" /></label></p>
+        <div class="field">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" placeholder="e.g. Tan Wei Ming" required>
+        </div>
+        <div class="field">
+          <label for="phone">Mobile Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="9123 4567" required>
+        </div>
+        <div class="field">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required>
+        </div>
+        <div class="field">
+          <label for="message">Your Requirements</label>
+          <textarea id="message" name="message" placeholder="e.g. unit type, budget, own-stay or investment" rows="3"></textarea>
+        </div>
+        <button type="submit" class="cta">Submit &amp; Get VVIP Pricing</button>
+      </form>
+      <div class="form-msg" id="formMsg"></div>
+    </div>
+  </div>
 </section>
 
 <footer>
@@ -132,41 +339,47 @@
 </footer>
 
 <script>
-document.getElementById('leadForm').addEventListener('submit', async function(e){
-  e.preventDefault();
-  const form = e.target;
-  const data = new FormData(form);
-  const msg = document.getElementById('formMsg');
-
-  // 1. Submit to Netlify Forms (powers email notification)
-  const netlifySubmit = fetch('/', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams(data).toString()
+  // Sticky topbar style on scroll
+  const topbar = document.getElementById('topbar');
+  window.addEventListener('scroll', () => {
+    topbar.classList.toggle('scrolled', window.scrollY > 60);
   });
 
-  // 2. Submit to serverless function (powers Telegram notification)
-  const telegramSubmit = fetch('/.netlify/functions/notify-telegram', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      name: data.get('name'),
-      phone: data.get('phone'),
-      email: data.get('email'),
-      message: data.get('message')
-    })
-  });
+  document.getElementById('leadForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const form = e.target;
+    const data = new FormData(form);
+    const msg = document.getElementById('formMsg');
 
-  try{
-    await Promise.all([netlifySubmit, telegramSubmit]);
-    msg.style.color = '#b89456';
-    msg.textContent = "Thank you! We've received your details and will be in touch shortly with VVIP pricing.";
-    form.reset();
-  }catch(err){
-    msg.style.color = '#e57373';
-    msg.textContent = "Something went wrong. Please try again or WhatsApp us directly.";
-  }
-});
+    // 1. Submit to Netlify Forms (powers email notification)
+    const netlifySubmit = fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(data).toString()
+    });
+
+    // 2. Submit to serverless function (powers Telegram notification)
+    const telegramSubmit = fetch('/.netlify/functions/notify-telegram', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: data.get('name'),
+        phone: data.get('phone'),
+        email: data.get('email'),
+        message: data.get('message')
+      })
+    });
+
+    try{
+      await Promise.all([netlifySubmit, telegramSubmit]);
+      msg.style.color = 'var(--gold-light)';
+      msg.textContent = "Thank you! We've received your details and will be in touch shortly with VVIP pricing.";
+      form.reset();
+    }catch(err){
+      msg.style.color = '#e57373';
+      msg.textContent = "Something went wrong. Please try again or WhatsApp us directly.";
+    }
+  });
 </script>
 
 </body>
