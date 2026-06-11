@@ -6,6 +6,12 @@
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-I", "-c", "import os,http.server,socketserver; os.chdir('/tmp/dashprev'); s=socketserver.TCPServer(('127.0.0.1',8765),http.server.SimpleHTTPRequestHandler); print('up',flush=True); s.serve_forever()"],
       "port": 8765
+    },
+    {
+      "name": "thomson-reserve-landing",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-I", "-c", "import os,http.server,socketserver; os.chdir('/Users/riopang/Desktop/Claude Code/thomson-reserve-landing'); s=socketserver.TCPServer(('127.0.0.1',8766),http.server.SimpleHTTPRequestHandler); print('up',flush=True); s.serve_forever()"],
+      "port": 8766
     }
   ]
 }
