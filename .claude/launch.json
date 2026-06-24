@@ -10,7 +10,7 @@
     {
       "name": "property-dashboard",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["/Users/riopang/Desktop/Property Dashboard/app.py"],
+      "runtimeArgs": ["-c", "import os,sys; os.chdir('/Users/riopang/Desktop/Claude Code/property-dashboard'); sys.path.insert(0,'.'); from app import app; print('up',flush=True); app.run(port=5050,debug=False,use_reloader=False)"],
       "port": 5050
     },
     {
