@@ -6,8 +6,8 @@ from datetime import datetime
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse
 
-BASE     = Path(__file__).parent
-TMPL     = BASE / "property_dashboard_templates" / "index.html"
+BASE     = Path(globals().get("__file__", "/tmp/prop_dash_app.py")).parent
+TMPL     = Path("/tmp/prop_dash_templates/index.html")
 UPLOADS  = Path("/tmp/prop_dashboard_uploads")
 ARCHIVE  = Path.home() / "Desktop" / "Property Archive"
 UPLOADS.mkdir(exist_ok=True)

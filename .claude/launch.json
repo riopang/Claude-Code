@@ -10,7 +10,7 @@
     {
       "name": "property-dashboard",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-I", "-c", "import socketserver,threading,json,queue,shutil,subprocess,sys,os,email.parser; from http.server import HTTPServer,BaseHTTPRequestHandler; from urllib.parse import urlparse; from pathlib import Path; from datetime import datetime; PORT=5050; TMPL=Path('/Users/riopang/Desktop/Claude Code/property_dashboard_templates/index.html'); UPLOADS=Path('/tmp/prop_dashboard_uploads'); ARCHIVE=Path.home()/'Desktop'/'Property Archive'; UPLOADS.mkdir(exist_ok=True); ARCHIVE.mkdir(exist_ok=True); _q=queue.Queue(); exec(open('/Users/riopang/Desktop/Claude Code/property_dashboard_app.py').read().split('# ── HTTP Handler')[1].split('if __name__')[0]); exec('class H(Handler): pass'); server=type('S',(socketserver.ThreadingMixIn,HTTPServer),{'daemon_threads':True})(('127.0.0.1',PORT),Handler); print('up',flush=True); server.serve_forever()"],
+      "runtimeArgs": ["-I", "-c", "exec(open('/tmp/prop_dash_app.py').read()); import socketserver; server=type('S',(socketserver.ThreadingMixIn,__import__('http').server.HTTPServer),{'daemon_threads':True})(('127.0.0.1',5050),Handler); print('up',flush=True); server.serve_forever()"],
       "port": 5050
     },
     {
