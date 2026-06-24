@@ -94,11 +94,11 @@ def stitch_reels(reel_files, out_path):
 def run_workflow(data):
     try:
         emit("── Starting workflow ──", "heading")
-        address, postal   = data["address"], data["postal"]
-        prop_type, tenure = data["prop_type"], data["tenure"]
-        floor_area        = data["floor_area"]
-        bedrooms, baths   = data["bedrooms"], data["bathrooms"]
-        price, usps       = data["price"], data["usps"]
+        address, postal    = data["address"], data["postal"]
+        prop_type, tenure  = data["prop_type"], data["tenure"]
+        floor_area         = data["floor_area"]
+        bedrooms, baths    = data["bedrooms"], data["bathrooms"]
+        listing_type, price, usps = data.get("listing_type","For Sale"), data["price"], data["usps"]
         do_reels          = data.get("do_reels", False)
         do_agentnet       = data.get("do_agentnet", False)
 
@@ -111,6 +111,7 @@ def run_workflow(data):
         with open(job / "listing_details.txt", "w") as f:
             f.write("PROPERTY LISTING DETAILS\n" + "="*40 + "\n")
             f.write(f"Address     : {address}, S({postal})\n")
+            f.write(f"Listing     : {listing_type}\n")
             f.write(f"Type        : {prop_type}\n")
             f.write(f"Tenure      : {tenure}\n")
             f.write(f"Floor Area  : {floor_area} sqft\n")
