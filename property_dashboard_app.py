@@ -14,6 +14,7 @@ UPLOADS.mkdir(exist_ok=True)
 ARCHIVE.mkdir(exist_ok=True)
 
 _q: queue.Queue = queue.Queue()
+_confirm_event = threading.Event()
 
 def emit(msg, t="log"):
     _q.put(json.dumps({"msg": msg, "type": t}))
@@ -157,7 +158,15 @@ def run_workflow(data):
             emit(f"✅ {len(src_files)} originals archived", "success")
 
         if do_agentnet:
-            emit("\n── Opening AgentNet portal ──", "heading")
+            emit("\n── Ready to post to AgentNet ──", "heading")
+            emit(f"   Address : {address}, S({postal})")
+            emit(f"   Type    : {prop_type}  |  Tenure: {tenure}")
+            emit(f"   Area    : {floor_area} sqft  |  {bedrooms} bed / {baths} bath")
+            emit(f"   Price   : {price}")
+            for u in usps: emit(f"   • {u}")
+            emit("CONFIRM_AGENTNET", "confirm")
+            _confirm_event.clear()
+            _confirm_event.wait()  # pause until user clicks Confirm
             subprocess.run(["open", "https://agentnet.propertyguru.com.sg"])
             emit("✅ AgentNet opened in your browser", "success")
             emit(f"   Address : {address}, S({postal})")
@@ -250,6 +259,10 @@ class Handler(BaseHTTPRequestHandler):
                     dest.write_bytes(part.get_payload(decode=True))
                     saved.append(fname)
             self.send_json({"saved": saved})
+
+        elif path == "/confirm":
+            _confirm_event.set()
+            self.send_json({"status": "confirmed"})
 
         elif path == "/run":
             length = int(self.headers.get("Content-Length", 0))
