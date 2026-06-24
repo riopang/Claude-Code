@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property Listing Dashboard</title>
+<style>
+  :root {
+    --bg:       #0f1117;
+    --surface:  #1a1d27;
+    --card:     #21253a;
+    --border:   #2e3350;
+    --accent:   #4f7cff;
+    --accent2:  #7c5cff;
+    --green:    #2ecc71;
+    --red:      #e74c3c;
+    --amber:    #f0a500;
+    --text:     #e8eaf0;
+    --muted:    #8a8fa8;
+    --radius:   14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; min-height: 100vh; }
+
+  /* Layout */
+  .layout { display: grid; grid-template-columns: 1fr 420px; gap: 20px; padding: 24px; max-width: 1400px; margin: 0 auto; }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+  /* Header */
+  header { padding: 20px 24px 0; max-width: 1400px; margin: 0 auto; display: flex; align-items: center; gap: 14px; }
+  header .logo { width: 40px; height: 40px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  header h1 { font-size: 20px; font-weight: 700; }
+  header p  { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  /* Cards */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; }
+  .card-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 16px; }
+
+  /* Drop zone */
+  .drop-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 36px 20px; text-align: center; cursor: pointer; transition: all .2s; position: relative; }
+  .drop-zone:hover, .drop-zone.over { border-color: var(--accent); background: rgba(79,124,255,.06); }
+  .drop-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .drop-zone .dz-icon { font-size: 36px; margin-bottom: 10px; }
+  .drop-zone .dz-text { font-size: 15px; color: var(--muted); }
+  .drop-zone .dz-text span { color: var(--accent); font-weight: 600; }
+
+  /* Photo preview grid */
+  .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 16px; }
+  .photo-thumb { position: relative; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: var(--surface); }
+  .photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .photo-thumb .rm { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,.6); border: none; color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+  /* Form */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.full { grid-column: 1 / -1; }
+  label { font-size: 12px; color: var(--muted); font-weight: 500; }
+  input, select, textarea {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text); padding: 9px 12px; font-size: 14px; outline: none; width: 100%;
+    transition: border-color .2s;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  textarea { resize: vertical; min-height: 80px; font-family: inherit; }
+  select option { background: var(--card); }
+
+  /* Toggles */
+  .toggles { display: flex; flex-direction: column; gap: 12px; }
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: var(--surface); border-radius: 10px; border: 1px solid var(--border); }
+  .toggle-row .tl { font-size: 14px; font-weight: 500; }
+  .toggle-row .ts { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; inset: 0; background: var(--border); border-radius: 24px; cursor: pointer; transition: .2s; }
+  .slider:before { content: ""; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .2s; }
+  input:checked + .slider { background: var(--accent); }
+  input:checked + .slider:before { transform: translateX(20px); }
+
+  /* Run button */
+  .btn-run { width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; transition: opacity .2s, transform .1s; letter-spacing: .02em; }
+  .btn-run:hover { opacity: .9; }
+  .btn-run:active { transform: scale(.98); }
+  .btn-run:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* Progress panel */
+  .progress-panel { display: flex; flex-direction: column; gap: 16px; }
+  .log-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; height: 360px; overflow-y: auto; font-family: "SF Mono", "Fira Code", monospace; font-size: 12.5px; line-height: 1.7; }
+  .log-box .l-log     { color: var(--text); }
+  .log-box .l-success { color: var(--green); }
+  .log-box .l-error   { color: var(--red); }
+  .log-box .l-warn    { color: var(--amber); }
+  .log-box .l-heading { color: var(--accent); font-weight: 700; }
+  .log-box .l-ping    { display: none; }
+
+  /* Status badge */
+  .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+  .status-badge.idle    { background: rgba(138,143,168,.15); color: var(--muted); }
+  .status-badge.running { background: rgba(79,124,255,.15); color: var(--accent); }
+  .status-badge.done    { background: rgba(46,204,113,.15); color: var(--green); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .dot.pulse { animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  /* Archive list */
+  .archive-list { display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; }
+  .archive-item { padding: 8px 12px; background: var(--surface); border-radius: 8px; font-size: 12px; color: var(--muted); border: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .archive-item::before { content: "📁"; }
+
+  /* Upload progress bar */
+  .upload-bar-wrap { height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; display: none; margin-top: 10px; }
+  .upload-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 4px; width: 0%; transition: width .3s; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🏠</div>
+  <div>
+    <h1>Property Listing Dashboard</h1>
+    <p>Enhance photos · Create reels · Publish to AgentNet</p>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- LEFT COLUMN -->
+  <div style="display:flex;flex-direction:column;gap:20px;">
+
+    <!-- Drop Zone -->
+    <div class="card">
+      <div class="card-title">1 · Drop Property Photos</div>
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" accept="image/*" multiple>
+        <div class="dz-icon">📷</div>
+        <div class="dz-text">Drag & drop photos here, or <span>click to browse</span></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px;">JPG · PNG · HEIC · WebP</div>
+      </div>
+      <div class="upload-bar-wrap" id="uploadBarWrap">
+        <div class="upload-bar" id="uploadBar"></div>
+      </div>
+      <div class="photo-grid" id="photoGrid"></div>
+    </div>
+
+    <!-- Property Details -->
+    <div class="card">
+      <div class="card-title">2 · Property Details</div>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>Full Address (Block / Street / Unit)</label>
+          <input id="address" type="text" placeholder="e.g. 123 Orchard Road #10-01">
+        </div>
+        <div class="form-group">
+          <label>Postal Code</label>
+          <input id="postal" type="text" placeholder="238888" maxlength="6">
+        </div>
+        <div class="form-group">
+          <label>Property Type</label>
+          <select id="prop_type">
+            <option value="HDB">HDB</option>
+            <option value="Condo" selected>Condo</option>
+            <option value="Landed">Landed</option>
+            <option value="Commercial">Commercial</option>
+            <option value="Industrial">Industrial</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tenure</label>
+          <select id="tenure">
+            <option value="Freehold" selected>Freehold</option>
+            <option value="99-year leasehold">99-year Leasehold</option>
+            <option value="999-year leasehold">999-year Leasehold</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Floor Area (sqft)</label>
+          <input id="floor_area" type="text" placeholder="1,200">
+        </div>
+        <div class="form-group">
+          <label>Bedrooms</label>
+          <input id="bedrooms" type="text" placeholder="3+1">
+        </div>
+        <div class="form-group">
+          <label>Bathrooms</label>
+          <input id="bathrooms" type="text" placeholder="2">
+        </div>
+        <div class="form-group">
+          <label>Asking Price / Monthly Rental</label>
+          <input id="price" type="text" placeholder="$1,200,000 or $3,500/mth">
+        </div>
+        <div class="form-group full">
+          <label>Unique Selling Points / Key Features (one per line)</label>
+          <textarea id="usps" placeholder="Corner unit with panoramic view&#10;Fully renovated kitchen&#10;Walking distance to MRT"></textarea>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div style="display:flex;flex-direction:column;gap:20px;">
+
+    <!-- Options -->
+    <div class="card">
+      <div class="card-title">3 · Workflow Options</div>
+      <div class="toggles">
+        <div class="toggle-row">
+          <div>
+            <div class="tl">Create Reels</div>
+            <div class="ts">Ken Burns Ken Burns effect per photo + stitched final video</div>
+          </div>
+          <label class="switch"><input type="checkbox" id="do_reels" checked><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div>
+            <div class="tl">Open AgentNet</div>
+            <div class="ts">Launch portal + show listing details to copy in</div>
+          </div>
+          <label class="switch"><input type="checkbox" id="do_agentnet" checked><span class="slider"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Run -->
+    <div class="card">
+      <div class="card-title">4 · Run</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <span style="font-size:13px;color:var(--muted);">Status</span>
+        <span class="status-badge idle" id="statusBadge"><span class="dot"></span> Idle</span>
+      </div>
+      <button class="btn-run" id="runBtn" onclick="startWorkflow()">▶  Start Workflow</button>
+    </div>
+
+    <!-- Progress log -->
+    <div class="card progress-panel">
+      <div class="card-title">Progress Log</div>
+      <div class="log-box" id="logBox">
+        <span style="color:var(--muted);">Ready. Fill in the details and hit Start Workflow.</span>
+      </div>
+    </div>
+
+    <!-- Archive -->
+    <div class="card">
+      <div class="card-title">Recent Archive</div>
+      <div class="archive-list" id="archiveList">
+        <div style="color:var(--muted);font-size:12px;">Loading…</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ── File handling ──────────────────────────────────────────────────────────
+  let uploadedFiles = [];
+
+  const dropZone  = document.getElementById("dropZone");
+  const fileInput = document.getElementById("fileInput");
+  const photoGrid = document.getElementById("photoGrid");
+  const uploadBar = document.getElementById("uploadBar");
+  const uploadBarWrap = document.getElementById("uploadBarWrap");
+
+  dropZone.addEventListener("dragover", e => { e.preventDefault(); dropZone.classList.add("over"); });
+  dropZone.addEventListener("dragleave", () => dropZone.classList.remove("over"));
+  dropZone.addEventListener("drop", e => { e.preventDefault(); dropZone.classList.remove("over"); handleFiles(e.dataTransfer.files); });
+  fileInput.addEventListener("change", () => handleFiles(fileInput.files));
+
+  function handleFiles(files) {
+    Array.from(files).forEach(f => {
+      if (!uploadedFiles.find(x => x.name === f.name)) uploadedFiles.push(f);
+    });
+    renderThumbs();
+    uploadToServer();
+  }
+
+  function renderThumbs() {
+    photoGrid.innerHTML = "";
+    uploadedFiles.forEach((f, i) => {
+      const url = URL.createObjectURL(f);
+      const div = document.createElement("div");
+      div.className = "photo-thumb";
+      div.innerHTML = `<img src="${url}"><button class="rm" onclick="removePhoto(${i})">✕</button>`;
+      photoGrid.appendChild(div);
+    });
+  }
+
+  function removePhoto(i) {
+    uploadedFiles.splice(i, 1);
+    renderThumbs();
+    uploadToServer();
+  }
+
+  function uploadToServer() {
+    if (!uploadedFiles.length) return;
+    const fd = new FormData();
+    uploadedFiles.forEach(f => fd.append("photos", f));
+    uploadBarWrap.style.display = "block";
+    uploadBar.style.width = "0%";
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/upload");
+    xhr.upload.onprogress = e => {
+      if (e.lengthComputable) uploadBar.style.width = (e.loaded / e.total * 100) + "%";
+    };
+    xhr.onload = () => {
+      uploadBar.style.width = "100%";
+      setTimeout(() => { uploadBarWrap.style.display = "none"; }, 800);
+    };
+    xhr.send(fd);
+  }
+
+  // ── Run workflow ───────────────────────────────────────────────────────────
+  function setStatus(state) {
+    const badge = document.getElementById("statusBadge");
+    const dot = badge.querySelector(".dot");
+    badge.className = "status-badge " + state;
+    dot.className = "dot" + (state === "running" ? " pulse" : "");
+    badge.innerHTML = `<span class="dot${state==="running"?" pulse":""}"></span> ${state.charAt(0).toUpperCase()+state.slice(1)}`;
+  }
+
+  function startWorkflow() {
+    const data = {
+      address:    document.getElementById("address").value.trim(),
+      postal:     document.getElementById("postal").value.trim(),
+      prop_type:  document.getElementById("prop_type").value,
+      tenure:     document.getElementById("tenure").value,
+      floor_area: document.getElementById("floor_area").value.trim(),
+      bedrooms:   document.getElementById("bedrooms").value.trim(),
+      bathrooms:  document.getElementById("bathrooms").value.trim(),
+      price:      document.getElementById("price").value.trim(),
+      usps:       document.getElementById("usps").value.split("\n").map(s=>s.trim()).filter(Boolean),
+      do_reels:   document.getElementById("do_reels").checked,
+      do_agentnet: document.getElementById("do_agentnet").checked,
+    };
+
+    if (!data.address) { alert("Please enter the property address."); return; }
+
+    document.getElementById("runBtn").disabled = true;
+    setStatus("running");
+
+    const log = document.getElementById("logBox");
+    log.innerHTML = "";
+
+    fetch("/run", { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(data) })
+      .then(() => {
+        const es = new EventSource("/progress");
+        es.onmessage = e => {
+          const d = JSON.parse(e.data);
+          if (d.type === "ping") return;
+          const line = document.createElement("div");
+          line.className = "l-" + d.type;
+          line.textContent = d.msg;
+          log.appendChild(line);
+          log.scrollTop = log.scrollHeight;
+          if (d.type === "done") {
+            es.close();
+            setStatus("done");
+            document.getElementById("runBtn").disabled = false;
+            loadArchive();
+          }
+        };
+      });
+  }
+
+  // ── Archive ────────────────────────────────────────────────────────────────
+  function loadArchive() {
+    fetch("/archive").then(r => r.json()).then(jobs => {
+      const el = document.getElementById("archiveList");
+      if (!jobs.length) { el.innerHTML = `<div style="color:var(--muted);font-size:12px;">No jobs yet.</div>`; return; }
+      el.innerHTML = jobs.slice(0, 8).map(j => `<div class="archive-item">${j}</div>`).join("");
+    });
+  }
+
+  loadArchive();
+</script>
+</body>
+</html>
