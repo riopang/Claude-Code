@@ -15,6 +15,7 @@ ARCHIVE.mkdir(exist_ok=True)
 
 _q: queue.Queue = queue.Queue()
 _confirm_event = threading.Event()
+_current_job: dict = {}   # holds job folder + listing data for review
 
 def emit(msg, t="log"):
     _q.put(json.dumps({"msg": msg, "type": t}))
@@ -158,15 +159,28 @@ def run_workflow(data):
             emit(f"✅ {len(src_files)} originals archived", "success")
 
         if do_agentnet:
-            emit("\n── Ready to post to AgentNet ──", "heading")
-            emit(f"   Address : {address}, S({postal})")
-            emit(f"   Type    : {prop_type}  |  Tenure: {tenure}")
-            emit(f"   Area    : {floor_area} sqft  |  {bedrooms} bed / {baths} bath")
-            emit(f"   Price   : {price}")
-            for u in usps: emit(f"   • {u}")
-            emit("CONFIRM_AGENTNET", "confirm")
+            emit("\n── Review your listing before posting ──", "heading")
+            # Collect edited photo paths for the review panel
+            edited_dir = job / "edited_photos"
+            photo_names = [f.name for f in sorted(edited_dir.iterdir()) if f.suffix.lower() in (".jpg",".jpeg",".png")] if edited_dir.exists() else []
+            _current_job.update({
+                "job_path": str(job),
+                "photos": photo_names,
+                "details": {
+                    "address": f"{address}, S({postal})",
+                    "listing_type": listing_type,
+                    "prop_type": prop_type,
+                    "tenure": tenure,
+                    "floor_area": floor_area,
+                    "bedrooms": bedrooms,
+                    "bathrooms": baths,
+                    "price": price,
+                    "usps": usps,
+                }
+            })
+            emit("SHOW_REVIEW", "review")
             _confirm_event.clear()
-            _confirm_event.wait()  # pause until user clicks Confirm
+            _confirm_event.wait()
             subprocess.run(["open", "https://agentnet.propertyguru.com.sg"])
             emit("✅ AgentNet opened in your browser", "success")
             emit(f"   Address : {address}, S({postal})")
@@ -212,6 +226,24 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Content-Length", len(html))
             self.end_headers()
             self.wfile.write(html)
+
+        elif path == "/review_data":
+            self.send_json(_current_job)
+
+        elif path.startswith("/photo/"):
+            fname    = path[len("/photo/"):]
+            job_path = _current_job.get("job_path", "")
+            fpath    = Path(job_path) / "edited_photos" / fname
+            if fpath.exists():
+                data = fpath.read_bytes()
+                self.send_response(200)
+                self.send_header("Content-Type", "image/jpeg")
+                self.send_header("Content-Length", len(data))
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.end_headers()
+                self.wfile.write(data)
+            else:
+                self.send_response(404); self.end_headers()
 
         elif path == "/archive":
             jobs = sorted(ARCHIVE.iterdir(), reverse=True) if ARCHIVE.exists() else []
