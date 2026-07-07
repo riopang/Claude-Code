@@ -11,7 +11,7 @@ function onOpen() {
     .addItem('2. Add New Listing Row', 'addListingRow')
     .addSeparator()
     .addItem('How to Add Photos', 'showPhotoInstructions')
-    .toUi();
+    .addToUi();
 }
 
 // ============================================================
