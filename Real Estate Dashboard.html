@@ -37,7 +37,7 @@
   .proj h3 a{color:var(--ink);text-decoration:none}
   .proj h3 a:hover{color:var(--accent)}
   .badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap}
-  .b-ccr{background:var(--ccr-bg);color:var(--ccr)} .b-rcr{background:var(--rcr-bg);color:var(--rcr)} .b-ocr{background:var(--ocr-bg);color:var(--ocr)}
+  .b-ccr{background:var(--ccr-bg);color:var(--ccr)} .b-rcr{background:var(--rcr-bg);color:var(--rcr)} .b-ocr{background:var(--ocr-bg);color:var(--ocr)} .b-ec{background:#e3ebf7;color:#2452a3}
   .countdown{font-size:12px;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:3px 9px;border-radius:99px;white-space:nowrap}
   .countdown.warn{color:var(--warn);background:var(--warn-bg)}
   .meta{font-size:13px;color:var(--muted)}
@@ -86,7 +86,7 @@
   <h1>🏠 Real Estate Command Centre</h1>
   <span class="meta" id="today"></span>
 </header>
-<div class="sub">Singapore · built from your <a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=00%20Dashboard">Real Estate Second Brain</a> vault · data as of <b>15 Jun 2026</b> · ask Claude to “refresh my dashboard” to regenerate</div>
+<div class="sub">Singapore · built from your <a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=00%20Dashboard">Real Estate Second Brain</a> vault · data as of <b>5 Aug 2026</b> · ask Claude to “refresh my dashboard” to regenerate</div>
 
 <!-- ===== MARKET PULSE STATS ===== -->
 <div class="grid stats">
@@ -125,7 +125,7 @@
       <h3><a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=07%20New%20Launches%2FTurf%20City%2FOverview">Dunearn House (Turf City)</a></h3>
       <span class="badge b-ccr">D10 · CCR</span>
     </div>
-    <div><span class="countdown" data-date="2026-07-01" data-label="Preview July 2026"></span></div>
+    <div><span class="countdown warn" data-label="⚠️ Preview slated Jul 2026 — window has passed, verify actual date/status"></span></div>
     <dl class="kv">
       <dt>Developer</dt><dd>Frasers / Sekisui House / CSC Land</dd>
       <dt>Units</dt><dd>380 · 5 blocks (10–19 sty)</dd>
@@ -238,6 +238,23 @@
     <div class="hook">Already-launched reference for D15 conversations — EOK's day-1 avg ($2,829psf) anchors comparisons vs Tembusu Grand/Grand Dunman/The Continuum. Demand &amp; Supply matrix scores 3BR highest (10/10). Pairs with Chuan Park's lease-top-up framework for D15/D19 cross-comparisons.</div>
     <a class="obs-link" href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=07%20New%20Launches%2FEmerald%20of%20Katong%2FOverview">Open vault note →</a>
   </div>
+
+  <div class="card proj">
+    <div class="proj-head">
+      <h3><a href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=07%20New%20Launches%2FSenja%20EC%2FOverview">Senja EC</a></h3>
+      <span class="badge b-ec">Bukit Panjang · EC</span>
+    </div>
+    <div><span class="countdown warn" data-label="⚠️ Pre-launch — developer, pricing &amp; launch date all TBC"></span></div>
+    <dl class="kv">
+      <dt>Developer</dt><dd>⚠️ TBC</dd>
+      <dt>Address</dt><dd>Senja Close, Bukit Panjang</dd>
+      <dt>Tenure</dt><dd>99-yr LH (EC) · old rules (5yr MOP)</dd>
+      <dt>Pricing</dt><dd>⚠️ Not released yet</dd>
+      <dt>Schools</dt><dd>3 primaries within 1km</dd>
+    </dl>
+    <div class="hook">One of only 5 EC pipeline projects exempt from the new 10-year MOP framework — keeps the old rules (5-yr MOP, DPS allowed, full privatization at 10yrs). "Last batch of ECs under old rules" is the core urgency pitch vs future ECs facing the new 10-yr MOP.</div>
+    <a class="obs-link" href="obsidian://open?vault=Real%20Estate%20Second%20Brain&file=07%20New%20Launches%2FSenja%20EC%2FOverview">Open vault note →</a>
+  </div>
 </div>
 
 <!-- ===== PRICE ANCHORS ===== -->
@@ -252,6 +269,7 @@
       <tr><td><b>Promenade Peak</b></td><td><span class="badge b-ccr">CCR</span></td><td class="num">~$2,600–3,500</td><td class="num">~$1.84M <span class="meta">(657sf)</span></td><td class="num">~$3.0M <span class="meta">(1,076sf)</span></td><td class="num">~$4.5xM <span class="meta">(1,421sf)</span></td><td>⚠️ verify</td></tr>
       <tr><td><b>UPPERHOUSE</b></td><td><span class="badge b-ccr">CCR</span></td><td class="num">$3,200–3,600</td><td class="num">~$2.24–2.52M <span class="meta">(700sf)</span></td><td class="num">~$3.24–3.64M <span class="meta">(1,012sf)</span></td><td class="num">—</td><td>TBC</td></tr>
       <tr><td><b>Chuan Park</b></td><td><span class="badge b-ocr">OCR</span></td><td class="num">~$2,500</td><td class="num">$1.75M <span class="meta">(700sf)</span></td><td class="num">$2.39M <span class="meta">(914sf)</span></td><td class="num">$3.47M <span class="meta">(1,335sf)</span></td><td>TBC</td></tr>
+      <tr><td><b>Senja EC</b></td><td><span class="badge b-ec">EC</span></td><td class="num">TBC</td><td class="num">TBC</td><td class="num">TBC</td><td class="num">TBC</td><td>TBC</td></tr>
     </tbody>
   </table>
   <div class="fine">Recent take-up benchmarks: Tengah Garden Residences 99% @ $2,111 psf median · Vela Bay 72% @ $2,886 psf · Skye at Holland 99% @ $2,953 psf · LyndenWoods 94.5% @ $2,450 psf · Emerald of Katong 76.7% @ $2,829 psf (Nov 2024).</div>
@@ -280,6 +298,7 @@
       <li><b>CCR recovering but watch vacancy:</b> swung −3.5% → +0.6%, yet vacancy is highest at 8.2%. Build vacancy buffer into CCR rental-yield projections (Dunearn House, UPPERHOUSE, Promenade Peak).</li>
       <li><b>Demand is selective, not euphoric:</b> Apr's 1,548 sales were concentrated in location+value launches (Tengah 99%, Vela Bay 72%). Position pipeline projects on fundamentals, not FOMO.</li>
       <li><b>Buyers are local:</b> 88.9% Singaporean, 9.6% PR, 1.5% foreigner (Apr 2026) — ABSD-sensitive structuring (decoupling, 1st-property timing) matters more than ever.</li>
+      <li><b>OCR momentum still holding into H2:</b> Lentor Gardens Residences (Kingsford) sold 54% of 499 units on its 18–19 Jul launch weekend at $2,350 psf avg, 91% Singaporean buyers — freshest confirmation that well-located, value-priced OCR launches keep clearing post-cooling-measures.</li>
     </ul>
   </div>
 </div>
@@ -333,6 +352,9 @@
     <li data-id="comps-log"><input type="checkbox"><span><b>Habit:</b> Comps Log is empty — start logging caveats from each CMA so PSF trend analysis becomes possible.</span></li>
     <li data-id="chuan-park-developer"><input type="checkbox"><span><b>Verify:</b> Chuan Park's actual developer, TOP date, and official launch date — current deck only carries ERA agent-team branding (PreeminentGroup/KennyNeoDivisions), not the project developer.</span></li>
     <li data-id="eok-top-date"><input type="checkbox"><span><b>Verify:</b> Emerald of Katong's official TOP date if released (vault currently estimates end-2028 based on typical build timelines).</span></li>
+    <li data-id="dunearn-preview-passed"><input type="checkbox"><span><b>Verify:</b> Dunearn House (Turf City) — "Preview July 2026" window has now passed with no confirmed launch date/result in the vault; check actual status before any CCR pricing pitch.</span></li>
+    <li data-id="senja-ec-new"><input type="checkbox"><span><b>New:</b> Senja EC (Bukit Panjang) added to vault — developer, pricing and launch date all TBC; update as ERA releases details. Sales angle: one of 5 EC pipeline projects grandfathered under the old 5-yr MOP rules.</span></li>
+    <li data-id="lentor-gardens-comp"><input type="checkbox"><span><b>FYI:</b> Lentor Gardens Residences (Kingsford) launched 18–19 Jul 2026 — 54% sold (270/499 units) at $2,350 psf avg. Useful fresh comp for Dunearn House's Lentor precedent table and general OCR-momentum talking points.</span></li>
   </ul>
 </div>
 
@@ -364,9 +386,6 @@ document.querySelectorAll('.countdown:not([data-date])').forEach(el=>{ el.textCo
 
 // ---- key dates bar ----
 const keyDates = [
-  {d:'2026-06-29', t:'Lucerne Grand site walk', s:'Meet at Lakeside MRT'},
-  {d:'2026-06-28', t:'Lucerne roadshows end', s:'JEM/Westgate · Taman Jurong · J-Walk'},
-  {d:'2026-07-15', t:'Dunearn House preview', s:'July 2026 (date TBC)'},
   {d:'2026-09-15', t:'Thomson Reserve preview', s:'Sept/Oct 2026 window'},
   {d:'2026-09-15', t:'Lucerne Grand preview', s:'Sept/Oct 2026 window'},
 ];
